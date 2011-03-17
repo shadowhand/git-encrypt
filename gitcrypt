@@ -6,6 +6,26 @@ readonly DEFAULT_CIPHER="aes-256-cbc"
 init_config() {
 	local answer
 	while [ 1 ]; do
+		while [ -z "$SALT" ]; do
+			echo -n "Generate a random salt? [Y/n] "
+			read answer
+
+			case "$answer" in
+				n*|N*)
+					echo -n "Shared salt as hex characters: "
+					read SALT
+
+					if [ $(echo "$SALT" | grep '[^a-f0-9]' | wc -l) -ne 0 ]; then
+						echo "Error: non-hex characters in salt"
+						unset -v SALT
+					fi
+					;;
+				*)
+					SALT=$(head -c 10 < /dev/random | md5 | cut -c-16)
+					;;
+			esac
+		done
+
 		while [ -z "$PASS" ]; do
 			echo -n "Enter your passphrase: "
 			read PASS
@@ -20,10 +40,11 @@ init_config() {
 			exists=$(openssl list-cipher-commands | grep "$CIPHER")
 			[ $? -eq 0 ] && break
 
-			echo "Cipher '$CIPHER' is not available"
+			echo "Error: Cipher '$CIPHER' is not available"
 		done
 
 		echo -e "\nThis configuration will be stored:\n"
+		echo "salt:   $SALT"
 		echo "pass:   $PASS"
 		echo "cipher: $CIPHER"
 		echo -e -n "\nDoes this look right? [Y/n] "
@@ -32,6 +53,7 @@ init_config() {
 		case "$answer" in
 			n*|N*)
 				# Reconfigure
+				unset -v SALT
 				unset -v PASS
 				unset -v CIPHER
 				;;
@@ -65,6 +87,7 @@ init_config() {
 	echo "    renormalize = true" >> $attrs
 
 	# Encryption
+	git config gitcrypt.salt "$SALT"
 	git config gitcrypt.pass "$PASS"
 	git config gitcrypt.cipher "$CIPHER"
 
@@ -76,7 +99,7 @@ init_config() {
 
 _clean() {
 	# Encrypt using OpenSSL
-	openssl enc -base64 -$CIPHER -salt -k "$PASS"
+	openssl enc -base64 -$CIPHER -S "$SALT" -k "$PASS"
 }
 
 _smudge() {
@@ -91,6 +114,13 @@ _diff() {
 
 case "$1" in
 	clean|smudge|diff)
+		# Need a shared salt
+		SALT=$(git config gitcrypt.salt)
+		if [ -z "$SALT" ]; then
+			echo "Gitcrypt: shared salt (gitcrypt.salt) has not been configured"
+			exit 1
+		fi
+
 		# Need a secure passphrase
 		PASS=$(git config gitcrypt.pass)
 		if [ -z "$PASS" ]; then

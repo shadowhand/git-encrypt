@@ -22,8 +22,8 @@ And it must be accessible in your `$PATH`:
 ## Configuration
 
 To quickly setup gitcrypt interactively, run `gitcrypt init` from the root
-of your git repository. It will ask you for a passphrase, cipher mode, and
-what files should be encrypted.
+of your git repository. It will ask you for a passphrase, shared salt,
+cipher mode, and what files should be encrypted.
 
     $ cd my-repo
     $ gitcrypt init
@@ -35,8 +35,10 @@ decrypts file content as necessary.
 
 ### Manual Configuration
 
-First, you will need to add a secure passphrase to your git configuration:
+First, you will need to add a shared salt (16 hex characters) and a secure
+passphrase to your git configuration:
 
+    $ git config gitcrypt.salt 0000000000000000
     $ git config gitcrypt.pass my-secret-phrase
 
 *It is possible to set this options globally using `git config --global`, but
@@ -99,8 +101,9 @@ Do not fear, this is actually what we want right now, because we need to setup
 gitcrypt before doing a checkout. Now we just repeat the configuration as it
 was done for the original repo.
 
-Second, set your encryption passphrase:
+Second, set your shared salt and encryption passphrase:
 
+    $ git config gitcrypt.salt abcdef0123456789
     $ git config gitcrypt.pass "gosh, i am so insecure!"
 
 Third, edit `.gitattributes` or `.git/info/attributes`:
