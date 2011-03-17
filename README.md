@@ -21,25 +21,36 @@ And it must be accessible in your `$PATH`:
 
 ## Configuration
 
-First, you will need to add a secret salt and secure passphrase to your git
-configuration. The secret salt must be 16 **hexidecimal** chacaters and the
-secure passphrase can be any characters of any length:
+To quickly setup gitcrypt interactively, run `gitcrypt init` from the root
+of your git repository. It will ask you for a passphrase, cipher mode, and
+what files should be encrypted.
 
-    $ git config gitcrypt.salt 0000000000000000
+    $ cd my-repo
+    $ gitcrypt init
+
+Your repository is now set up! Any time you `git add` a file that matches the
+filter pattern the `clean` filter is applied, automatically encrypting the file
+before it is staged. Using `git diff` will work normally, as it automatically
+decrypts file content as necessary.
+
+### Manual Configuration
+
+First, you will need to add a secure passphrase to your git configuration:
+
     $ git config gitcrypt.pass my-secret-phrase
 
-*It is possible to set these options globally using `git config --global`, but
-more secure to create a separate salt and passphrase for every repository.*
+*It is possible to set this options globally using `git config --global`, but
+more secure to create a separate passphrase for every repository.*
 
-A quick way to generate a new salt is:
+The default [encryption cipher][4] is `aes-256-cbc`, which should be suitable
+for almost everyone. However, it is also possible to use a different cipher:
 
-    $ head -c 10 < /dev/random | md5 | cut -c-16
+    $ git config gitcrypt.cipher aes-256-cbc
 
-## Usage
+**Do not use an `ecb` cipher unless you are 100% sure what you are doing!**
 
-For every repository that you want to use gitcrypt in, you will need a
-[.gitattributes][4] file to define what files will be encrypted. Any file
-[pattern format][5] can be used here.
+Next, you need to define what files will be automatically encrypted using the
+[.gitattributes][5] file. Any file [pattern format][6] can be used here.
 
 To encrypt all the files in the repo:
 
@@ -73,12 +84,7 @@ Or if you prefer to manually edit `.git/config`:
     [diff "encrypt"]
         textconv = gitcrypt diff
 
-Your repository is now set up! Any time you `git add` a file that matches the
-filter pattern the `clean` filter is applied, automatically encrypting the file
-before it is staged. Using `git diff` will work normally, as it automatically
-decrypts file content as necessary.
-
-### Decryption and Clones
+## Decrypting Clones
 
 To set up decryption from a clone, you will need to repeat most of these steps
 on the other side.
@@ -93,9 +99,8 @@ Do not fear, this is actually what we want right now, because we need to setup
 gitcrypt before doing a checkout. Now we just repeat the configuration as it
 was done for the original repo.
 
-Second, set your encryption salt and passphrase:
+Second, set your encryption passphrase:
 
-    $ git config gitcrypt.salt 0123456789abcdef
     $ git config gitcrypt.pass "gosh, i am so insecure!"
 
 Third, edit `.gitattributes` or `.git/info/attributes`:
@@ -125,7 +130,8 @@ you could [buy me a beer][wishes].
 [1]: http://syncom.appspot.com/papers/git_encryption.txt "GIT transparent encryption"
 [2]: http://syncom.appspot.com/
 [3]: http://git.661346.n2.nabble.com/Transparently-encrypt-repository-contents-with-GPG-td2470145.html "Web discussion: Transparently encrypt repository contents with GPG"
-[4]: http://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
-[5]: http://www.kernel.org/pub/software/scm/git/docs/gitignore.html#_pattern_format
+[4]: http://en.wikipedia.org/wiki/Cipher
+[5]: http://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
+[6]: http://www.kernel.org/pub/software/scm/git/docs/gitignore.html#_pattern_format
 
 [wishes]: http://www.amazon.com/gp/registry/wishlist/1474H3P2204L8 "Woody Gilk's Wish List on Amazon.com"
