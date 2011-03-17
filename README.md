@@ -41,18 +41,21 @@ passphrase to your git configuration:
     $ git config gitcrypt.salt 0000000000000000
     $ git config gitcrypt.pass my-secret-phrase
 
-*It is possible to set this options globally using `git config --global`, but
-more secure to create a separate passphrase for every repository.*
+> It is possible to set these options globally using `git config --global`,
+but more secure to create a separate passphrase for every repository.
 
-The default [encryption cipher][4] is `aes-256-cbc`, which should be suitable
+The default [encryption cipher][4] is `aes-256-ebc`, which should be suitable
 for almost everyone. However, it is also possible to use a different cipher:
 
-    $ git config gitcrypt.cipher aes-256-cbc
+    $ git config gitcrypt.cipher aes-256-ebc
 
-**Do not use an `ecb` cipher unless you are 100% sure what you are doing!**
+> An "ECB" mode is used because it encrypts in a format that provides usable
+text diff, meaning that a single change will not cause the entire file to be
+internally marked as changed. Because a static salt must be used, using "CBC"
+would provide very little, if any, increased security over "ECB" mode.
 
 Next, you need to define what files will be automatically encrypted using the
-[.gitattributes][5] file. Any file [pattern format][6] can be used here.
+[.git/info/attributes][5] file. Any file [pattern format][6] can be used here.
 
 To encrypt all the files in the repo:
 
@@ -68,11 +71,10 @@ Or to encrypt all ".secure" files:
 
     *.secure filter=encrypt diff=encrypt
 
-*Note: It is not recommended to add your `.gitattributes` file to the
-repository itself. Instead, add `.gitattributes` to your `.gitignore` file
-or use `.git/info/attributes` instead.*
+> If you want this mapping to be included in your repository, use a
+`.gitattributes` file instead and **do not** encrypt it.
 
-Next, you need to map the `encrypt` filter to `gitcrypt` using `git config`:
+Next, you need to map the `encrypt` filter to `gitcrypt`:
 
     $ git config filter.encrypt.smudge "gitcrypt smudge"
     $ git config filter.encrypt.clean "gitcrypt clean"
@@ -88,37 +90,22 @@ Or if you prefer to manually edit `.git/config`:
 
 ## Decrypting Clones
 
-To set up decryption from a clone, you will need to repeat most of these steps
-on the other side.
+To set up decryption from a clone, you will need to repeat the same setup on
+the new clone.
 
 First, clone the repository, but **do not perform a checkout**:
 
     $ git clone -n git://github.com/johndoe/encrypted.get
     $ cd encrypted
 
-If you do a `git status` now, it will show all your files as being deleted.
+> If you do a `git status` now, it will show all your files as being deleted.
 Do not fear, this is actually what we want right now, because we need to setup
-gitcrypt before doing a checkout. Now we just repeat the configuration as it
-was done for the original repo.
+gitcrypt before doing a checkout.
 
-Second, set your shared salt and encryption passphrase:
+Now you can either run `gitcrypt init` or do the same manual configuration that
+performed on the original repository.
 
-    $ git config gitcrypt.salt abcdef0123456789
-    $ git config gitcrypt.pass "gosh, i am so insecure!"
-
-Third, edit `.gitattributes` or `.git/info/attributes`:
-
-    * filter=encrypt diff=encrypt
-    [merge]
-        renormalize = true
-
-Fourth, map the `encrypt` filter:
-
-    $ git config filter.encrypt.smudge "gitcrypt smudge"
-    $ git config filter.encrypt.clean "gitcrypt clean"
-    $ git config diff.encrypt.textconv "gitcrypt diff"
-
-Configuration is complete, now reset and checkout all the files:
+Once configuration is complete, reset and checkout all the files:
 
     $ git reset HEAD
     $ git ls-files --deleted | xargs git checkout --
