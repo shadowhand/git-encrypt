@@ -1,0 +1,56 @@
+#!/bin/bash
+
+VERSION=0.1.0
+
+_clean() {
+	# Salt must be 16 characters or less to not fail
+	SALT=$(echo "$SALT" | cut -c-16)
+
+	# Encrypt using OpenSSL
+	openssl enc -base64 -aes-256-ecb -S "$SALT" -k "$PASS"
+}
+
+_smudge() {
+	if [ -z "$SALT" ] || [ -z "$PASS" ]; then
+		echo "Gitcrypt: secret salt and/or pass phrase have not been set"
+		exit 1
+	fi
+
+	# If decryption fails, use `cat` instead
+	openssl enc -d -base64 -aes-256-ecb -k "$PASS" 2> /dev/null || cat
+}
+
+_diff() {
+	# If decryption fails, use `cat` instead
+	openssl enc -d -base64 -aes-256-ecb -k "$PASS" -in "$1" 2> /dev/null || cat "$1"
+}
+
+case "$1" in
+	clean|smudge|diff)
+		# Need secret salt and secure passphrase
+		SALT=$(git config gitcrypt.salt)
+		if [ -z "$SALT" ]; then
+			echo "Gitcrypt: secret salt (gitcrypt.salt) has not been configured"
+			exit 1
+		fi
+
+		PASS=$(git config gitcrypt.pass)
+		if [ -z "$PASS" ]; then
+			echo "Gitcrypt: secure passphrase (gitcrypt.pass) has not been configured"
+			exit 1
+		fi
+
+		# Execute command
+		_$1 "$2"
+		;;
+	version)
+		# Show version
+		echo "gitcrypt version $VERSION"
+		;;
+	*)
+		# Not a valid option
+		echo "Gitcrypt: command does not exist: $1"
+		exit 1
+		;;
+esac
+exit 0
