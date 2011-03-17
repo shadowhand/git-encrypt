@@ -4,6 +4,9 @@ The gitcrypt tool is inspired by [this document][1] written by [Ning Shang][2],
 which was in turn inspired by [this post][3]. Without these two documents,
 by people much smarter than me, gitcrypt would not exist.
 
+> There is [some controversy][4] over using this technique, so do your research
+and understand the implications of using this tool before you go crazy with it.
+
 ## Installation
 
 Clone git-encrypt somewhere on your local machine:
@@ -44,7 +47,7 @@ passphrase to your git configuration:
 > It is possible to set these options globally using `git config --global`,
 but more secure to create a separate passphrase for every repository.
 
-The default [encryption cipher][4] is `aes-256-ebc`, which should be suitable
+The default [encryption cipher][5] is `aes-256-ebc`, which should be suitable
 for almost everyone. However, it is also possible to use a different cipher:
 
     $ git config gitcrypt.cipher aes-256-ebc
@@ -55,7 +58,7 @@ internally marked as changed. Because a static salt must be used, using "CBC"
 would provide very little, if any, increased security over "ECB" mode.
 
 Next, you need to define what files will be automatically encrypted using the
-[.git/info/attributes][5] file. Any file [pattern format][6] can be used here.
+[.git/info/attributes][6] file. Any file [pattern format][7] can be used here.
 
 To encrypt all the files in the repo:
 
@@ -120,8 +123,9 @@ you could [buy me a beer][wishes].
 [1]: http://syncom.appspot.com/papers/git_encryption.txt "GIT transparent encryption"
 [2]: http://syncom.appspot.com/
 [3]: http://git.661346.n2.nabble.com/Transparently-encrypt-repository-contents-with-GPG-td2470145.html "Web discussion: Transparently encrypt repository contents with GPG"
-[4]: http://en.wikipedia.org/wiki/Cipher
-[5]: http://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
-[6]: http://www.kernel.org/pub/software/scm/git/docs/gitignore.html#_pattern_format
+[4]: http://article.gmane.org/gmane.comp.version-control.git/113221 "Junio Hamano does not recommend this technique"
+[5]: http://en.wikipedia.org/wiki/Cipher
+[6]: http://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
+[7]: http://www.kernel.org/pub/software/scm/git/docs/gitignore.html#_pattern_format
 
 [wishes]: http://www.amazon.com/gp/registry/wishlist/1474H3P2204L8 "Woody Gilk's Wish List on Amazon.com"
