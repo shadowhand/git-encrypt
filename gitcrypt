@@ -7,7 +7,7 @@ _clean() {
 	SALT=$(echo "$SALT" | cut -c-16)
 
 	# Encrypt using OpenSSL
-	openssl enc -base64 -aes-256-ecb -S "$SALT" -k "$PASS"
+	openssl enc -base64 -$CIPHER -S "$SALT" -k "$PASS"
 }
 
 _smudge() {
@@ -17,12 +17,12 @@ _smudge() {
 	fi
 
 	# If decryption fails, use `cat` instead
-	openssl enc -d -base64 -aes-256-ecb -k "$PASS" 2> /dev/null || cat
+	openssl enc -d -base64 -$CIPHER -k "$PASS" 2> /dev/null || cat
 }
 
 _diff() {
 	# If decryption fails, use `cat` instead
-	openssl enc -d -base64 -aes-256-ecb -k "$PASS" -in "$1" 2> /dev/null || cat "$1"
+	openssl enc -d -base64 -$CIPHER -k "$PASS" -in "$1" 2> /dev/null || cat "$1"
 }
 
 case "$1" in
@@ -39,6 +39,10 @@ case "$1" in
 			echo "Gitcrypt: secure passphrase (gitcrypt.pass) has not been configured"
 			exit 1
 		fi
+
+		# Cipher
+		CIPHER=$(git config gitcrypt.cipher)
+		[ -z "$CIPHER" ] && CIPHER="aes-256-ecb"
 
 		# Execute command
 		_$1 "$2"
