@@ -118,7 +118,9 @@ All the files in the are now decrypted and ready to be edited.
 # Conclusion
 
 Enjoy your secure git repository! If you think gitcrypt is totally awesome,
-you could [buy me a beer][wishes].
+you could [buy me something][wishes] or donate using Pledgie:
+
+[![Support my open source development][pledgie]][donate]
 
 [1]: http://syncom.appspot.com/papers/git_encryption.txt "GIT transparent encryption"
 [2]: http://syncom.appspot.com/
@@ -128,4 +130,6 @@ you could [buy me a beer][wishes].
 [6]: http://www.kernel.org/pub/software/scm/git/docs/gitattributes.html
 [7]: http://www.kernel.org/pub/software/scm/git/docs/gitignore.html#_pattern_format
 
-[wishes]: http://www.amazon.com/gp/registry/wishlist/1474H3P2204L8 "Woody Gilk's Wish List on Amazon.com"
+[wishes]: http://www.amazon.com/gp/registry/wishlist/1474H3P2204L8
+[donate]: http://www.pledgie.com/campaigns/14931
+[pledgie]: http://www.pledgie.com/campaigns/14931.png?skin=chrome
