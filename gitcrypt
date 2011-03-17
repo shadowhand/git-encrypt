@@ -39,7 +39,7 @@ case "$1" in
 
 		# Cipher
 		CIPHER=$(git config gitcrypt.cipher)
-		[ -z "$CIPHER" ] && CIPHER="aes-256-ccb"
+		[ -z "$CIPHER" ] && CIPHER="aes-256-cbc"
 
 		# Execute command
 		_$1 "$2"
