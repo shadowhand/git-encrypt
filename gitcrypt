@@ -3,9 +3,6 @@
 VERSION=0.1.0
 
 _clean() {
-	# Salt must be 16 characters or less to not fail
-	SALT=$(echo "$SALT" | cut -c-16)
-
 	# Encrypt using OpenSSL
 	openssl enc -base64 -$CIPHER -S "$SALT" -k "$PASS"
 }
