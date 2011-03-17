@@ -1,7 +1,7 @@
 # Transparent Git Encryption
 
 The gitcrypt tool is inspired by [this document][1] written by [Ning Shang][2],
-which was in turn inspired by [this post][1]. Without these two documents,
+which was in turn inspired by [this post][3]. Without these two documents,
 by people much smarter than me, gitcrypt would not exist.
 
 ## Installation
