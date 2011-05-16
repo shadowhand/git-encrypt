@@ -21,7 +21,8 @@ init_config() {
 					fi
 					;;
 				*)
-					SALT=$(head -c 10 < /dev/random | md5 | cut -c-16)
+					local md5=$(which md5 2>/dev/null || which md5sum 2>/dev/null)
+					SALT=$(head -c 10 < /dev/random | $md5 | cut -c-16)
 					;;
 			esac
 		done
