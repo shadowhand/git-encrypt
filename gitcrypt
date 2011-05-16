@@ -1,7 +1,7 @@
 #!/bin/bash
 
-readonly VERSION="0.2.1"
-readonly DEFAULT_CIPHER="aes-256-ebc"
+readonly VERSION="0.2.2"
+readonly DEFAULT_CIPHER="aes-256-ecb"
 
 init_config() {
 	local answer
@@ -21,7 +21,8 @@ init_config() {
 					fi
 					;;
 				*)
-					SALT=$(head -c 10 < /dev/random | md5 | cut -c-16)
+					local md5=$(which md5 2>/dev/null || which md5sum 2>/dev/null)
+					SALT=$(head -c 10 < /dev/random | $md5 | cut -c-16)
 					;;
 			esac
 		done
