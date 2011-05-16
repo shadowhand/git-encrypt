@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly VERSION="0.2.1"
+readonly VERSION="0.2.2"
 readonly DEFAULT_CIPHER="aes-256-ecb"
 
 init_config() {
