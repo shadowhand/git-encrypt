@@ -20,7 +20,7 @@ The `gitcrypt` command must be executable:
 
 And it must be accessible in your `$PATH`:
 
-    $ sudo ln -s gitcrypt /usr/bin/gitcrypt
+    $ sudo ln -s gitcrypt /usr/local/bin/gitcrypt
 
 ## Configuration
 
