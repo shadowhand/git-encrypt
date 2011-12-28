@@ -110,8 +110,7 @@ performed on the original repository.
 
 Once configuration is complete, reset and checkout all the files:
 
-    $ git reset HEAD
-    $ git ls-files --deleted | xargs git checkout --
+    $ git reset --hard HEAD
 
 All the files in the are now decrypted and ready to be edited.
 

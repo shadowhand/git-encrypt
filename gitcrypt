@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly VERSION="0.2.2"
+readonly VERSION="0.2.3"
 readonly DEFAULT_CIPHER="aes-256-ecb"
 
 init_config() {
@@ -28,8 +28,18 @@ init_config() {
 		done
 
 		while [ -z "$PASS" ]; do
-			echo -n "Enter your passphrase: "
-			read PASS
+			echo -n "Generate a random password? [Y/n]"
+			read answer
+
+			case "$answer" in
+				n*|N*)
+					echo -n "Enter your passphrase: "
+					read PASS
+					;;
+				*)
+					PASS=$(cat /dev/urandom | tr -dc '!@#$%^&*()_A-Z-a-z-0-9' | head -c32)
+					;;
+			esac
 		done
 
 		while [ 1 ]; do
