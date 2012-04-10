@@ -7,6 +7,9 @@ by people much smarter than me, gitcrypt would not exist.
 > There is [some controversy][4] over using this technique, so do your research
 and understand the implications of using this tool before you go crazy with it.
 
+## Requirements
+Openssl must be installed and the binary must be available in your $PATH.
+
 ## Installation
 
 Clone git-encrypt somewhere on your local machine:
@@ -113,6 +116,32 @@ Once configuration is complete, reset and checkout all the files:
     $ git reset --hard HEAD
 
 All the files in the are now decrypted and ready to be edited.
+
+# Alternate method: git-encrypt-init.sh
+
+Contributed by [Jay Taylor](https://jaytaylor.com "jaytaylor.com")
+
+
+The git-encrypt-init.sh shell script automatically performs all prepartion,
+setup and configuration for a local repository clone, prompting the user for
+any required information (salt and password phrases.)  This method of also
+ensures that the git-encrypt scripts are automatically installed to
+`~/.gitencrypt/`. One drawback to this approach is that it only supports having
+1 password.
+
+One reason to use this alternate approach is because it makes decrypting cloned
+repositories as simple as executing one script.
+
+## Usage
+
+Once you've cloned git-encrypt using the alternate script is straightforward:
+
+    $ cd /path/to/your/repository
+    $ sh /path/to/git-encrypt/git-encrypt-init.sh
+
+Then you can add the files you would like to have encrypted to the
+.gitattributes file contained in the root of your repository.
+
 
 # Conclusion
 
