@@ -95,7 +95,7 @@ init_config() {
 
 	echo "$pattern filter=encrypt diff=encrypt" >> $attrs
 	echo "[merge]" >> $attrs
-	echo "    renormalize = true" >> $attrs
+	echo "    renormalize=true" >> $attrs
 
 	# Encryption
 	git config gitcrypt.salt "$SALT"
