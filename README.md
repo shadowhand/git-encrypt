@@ -25,6 +25,49 @@ And it must be accessible in your `$PATH`:
 
     $ sudo ln -s gitcrypt /usr/local/bin/gitcrypt
 
+### For Windows
+
+**Verified on PortableGit Only !**
+
+Copy the file gitcrypt to your PortableGit/bin location. In my environment PortableGit is
+available at E:\PortableGit. 
+
+> copy gitcrypt E:\PortableGit\bin
+
+Also make sure that PATH environment variable has E:\PortableGit\bin 
+available in it.
+
+> Path=C:\Python27\;C:\Python27\Scripts;E:\PortableGit\bin;E:\PortableGit\libexec\git-core;C:\windows\system32;C:\windows\;C:\window
+> s\system32\WBEM;c:\windows\System32\WindowsPowerShell\v1.0\;c:\i386\~configs;C:\Users\VKHANORK\AppData\Roaming\Python\Scripts
+
+Setup gitcrypt:
+
+> E:\>mkdir TEST
+> 
+> E:\>cd TEST
+> 
+> E:\TEST>git init
+> Initialized empty Git repository in E:/TEST/.git/
+> 
+> E:\TEST>git config core.autocrlf false
+> 
+> E:\TEST>E:\PortableGit\bin\bash.exe E:\PortableGit\bin\gitcrypt init
+> Generate a random salt? [Y/n]
+> Generate a random password? [Y/n]
+> What encryption cipher do you want to use? [aes-256-ecb]
+> 
+> This configuration will be stored:
+> 
+> salt:   5ecc05565042de81
+> pass:   iLC#GkuzE1iOmUVItIQww8**oBDTfKE2
+> cipher: aes-256-ecb
+> 
+> Does this look right? [Y/n]
+> Do you want to use .git/info/attributes? [Y/n]
+> What files do you want encrypted? [*]
+> 
+> E:\TEST>
+
 ## Configuration
 
 To quickly setup gitcrypt interactively, run `gitcrypt init` from the root
