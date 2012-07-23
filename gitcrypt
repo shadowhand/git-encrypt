@@ -156,7 +156,11 @@ case "$1" in
 		;;
 	*)
 		# Not a valid option
-		echo "Gitcrypt: command does not exist: $1"
+    if [ -z "$1" ]; then
+      echo "Gitcrypt: available options: init, version"
+    else
+		  echo "Gitcrypt: command does not exist: $1"
+    fi
 		exit 1
 		;;
 esac
