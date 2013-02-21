@@ -37,7 +37,7 @@ init_config() {
 					read PASS
 					;;
 				*)
-					PASS=$(cat /dev/urandom | tr -dc '!@#$%^&*()_A-Z-a-z-0-9' | head -c32)
+					PASS=$(cat /dev/urandom | LC_ALL="C" tr -dc '!@#$%^&*()_A-Z-a-z-0-9' | head -c32)
 					;;
 			esac
 		done
