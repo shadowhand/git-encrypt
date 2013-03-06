@@ -88,12 +88,14 @@ init_config() {
 			;;
 	esac
 
-	local pattern
+	local patterns
 	echo -n "What files do you want encrypted? [*] "
-	read pattern
-	[ -z "$pattern" ] && pattern="*"
+	read patterns
+	[ -z "$patterns" ] && patterns="*"
 
-	echo "$pattern filter=encrypt diff=encrypt" >> $attrs
+	for pattern in $patterns; do
+		echo "$pattern filter=encrypt diff=encrypt" >> $attrs
+	done
 	echo "[merge]" >> $attrs
 	echo "    renormalize=true" >> $attrs
 
