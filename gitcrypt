@@ -5,6 +5,12 @@ readonly DEFAULT_CIPHER="aes-256-ecb"
 
 init_config() {
 	local answer
+
+	if [ ! -d ".git" ]; then
+		echo "Directory is not a git repository. Did you forget to run 'git init'?"
+		return 1
+	fi
+
 	while [ 1 ]; do
 		while [ -z "$SALT" ]; do
 			echo -n "Generate a random salt? [Y/n] "
