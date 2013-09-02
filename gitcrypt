@@ -3,10 +3,12 @@
 readonly VERSION="0.3.0"
 readonly DEFAULT_CIPHER="aes-256-ecb"
 
+[ -z "$GIT_DIR" ] && GIT_DIR=".git"
+
 init_config() {
 	local answer
 
-	if [ ! -d ".git" ]; then
+	if [ ! -d "$GIT_DIR" ]; then
 		echo "Directory is not a git repository. Did you forget to run 'git init'?"
 		return 1
 	fi
@@ -81,7 +83,7 @@ init_config() {
 		esac
 	done
 
-	echo -n "Do you want to use .git/info/attributes? [Y/n] "
+	echo -n "Do you want to use $GIT_DIR/info/attributes? [Y/n] "
 	read answer
 
 	local attrs
@@ -90,7 +92,7 @@ init_config() {
 			attrs=".gitattributes"
 			;;
 		*)
-			attrs=".git/info/attributes"
+			attrs="$GIT_DIR/info/attributes"
 			;;
 	esac
 
