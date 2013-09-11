@@ -7,6 +7,17 @@ by people much smarter than me, gitcrypt would not exist.
 > There is [some controversy][4] over using this technique, so do your research
 and understand the implications of using this tool before you go crazy with it.
 
+## Features
+
+**Not Vefified on Windows**
+
+Now you can encrypt/decrypt and recrypt(change passphrase) all history
+
+	$ gitcrypt crypthistory
+	$ gitcrypt decrypthistory
+	$ gitcrypt recrypt
+
+
 ## Requirements
 Openssl must be installed and the binary must be available in your $PATH.
 
