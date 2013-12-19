@@ -8,6 +8,11 @@ readonly DEFAULT_CIPHER="aes-256-ecb"
 init_config() {
 	local answer
 
+	# From git 1.7.8+, the .git in submodule folder is a file containing the actual path of gitdir.
+	if [ -f "$GIT_DIR" ]; then
+		GIT_DIR=`cat $GIT_DIR | sed 's/^gitdir: //'`
+	fi
+
 	if [ ! -d "$GIT_DIR" ]; then
 		echo "Directory is not a git repository. Did you forget to run 'git init'?"
 		return 1
