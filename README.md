@@ -93,10 +93,10 @@ passphrase to your git configuration:
 > It is possible to set these options globally using `git config --global`,
 but more secure to create a separate passphrase for every repository.
 
-The default [encryption cipher][5] is `aes-256-ebc`, which should be suitable
+The default [encryption cipher][5] is `aes-256-ecb`, which should be suitable
 for almost everyone. However, it is also possible to use a different cipher:
 
-    $ git config gitcrypt.cipher aes-256-ebc
+    $ git config gitcrypt.cipher aes-256-ecb
 
 > An "ECB" mode is used because it encrypts in a format that provides usable
 text diff, meaning that a single change will not cause the entire file to be
