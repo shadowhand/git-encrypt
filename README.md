@@ -110,7 +110,7 @@ To encrypt all the files in the repo:
 
     * filter=encrypt diff=encrypt
     [merge]
-        renormalize = true
+        renormalize=true
 
 To encrypt only one file, you could do this:
 
