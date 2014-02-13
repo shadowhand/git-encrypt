@@ -12,6 +12,13 @@ Openssl must be installed and the binary must be available in your $PATH.
 
 ## Installation
 
+### From a package manager
+Install from npm.
+
+    npm install -g git-encrypt
+
+### Manually
+
 Clone git-encrypt somewhere on your local machine:
 
     $ git clone https://github.com/shadowhand/git-encrypt
