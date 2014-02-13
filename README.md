@@ -144,7 +144,7 @@ the new clone.
 
 First, clone the repository, but **do not perform a checkout**:
 
-    $ git clone -n git://github.com/johndoe/encrypted.get
+    $ git clone -n git://github.com/johndoe/encrypted.git
     $ cd encrypted
 
 > If you do a `git status` now, it will show all your files as being deleted.
