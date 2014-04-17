@@ -47,7 +47,8 @@ init_config() {
 			case "$answer" in
 				n*|N*)
 					echo -n "Enter your passphrase: "
-					read PASS
+					read -s PASS
+					echo
 					;;
 				*)
 					PASS=$(cat /dev/urandom | LC_ALL="C" tr -dc '!@#$%^&*()_A-Z-a-z-0-9' | head -c32)
@@ -69,7 +70,7 @@ init_config() {
 
 		echo -e "\nThis configuration will be stored:\n"
 		echo "salt:   $SALT"
-		echo "pass:   $PASS"
+		echo "pass:   *****************"
 		echo "cipher: $CIPHER"
 		echo -e -n "\nDoes this look right? [Y/n] "
 		read answer
