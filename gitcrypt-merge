@@ -1,0 +1,27 @@
+#!/bin/bash
+
+CURRENT="$1"
+BASE="$2"
+OTHER="$3"
+SIZE="$4"
+
+cat "$CURRENT" | gitcrypt smudge > "$CURRENT".tmp || exit 1
+cat "$CURRENT".tmp > "$CURRENT"
+rm "$CURRENT".tmp
+
+cat "$BASE" | gitcrypt smudge > "$BASE".tmp || exit 1
+cat "$BASE".tmp > "$BASE"
+rm "$BASE".tmp
+
+cat "$OTHER" | gitcrypt smudge > "$OTHER".tmp || exit 1
+cat "$OTHER".tmp > "$OTHER"
+rm "$OTHER".tmp
+
+git merge-file --marker-size "$SIZE" "$CURRENT" "$BASE" "$OTHER" 
+cp "$CURRENT" confl
+exit 1
+
+
+cat "$CURRENT" | gitcrypt clean > "$CURRENT".tmp || exit 1
+cat "$CURRENT".tmp > "$CURRENT"
+rm "$CURRENT".tmp

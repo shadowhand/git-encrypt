@@ -5,6 +5,20 @@ readonly DEFAULT_CIPHER="aes-256-ecb"
 
 [ -z "$GIT_DIR" ] && GIT_DIR=".git"
 
+_disable() {
+	git config --unset filter.encrypt.smudge
+	git config --unset filter.encrypt.clean
+	git config --unset diff.encrypt.textconv
+	echo "git-encrypt filter disabled"
+}
+
+_enable() {
+	git config filter.encrypt.smudge "gitcrypt smudge"
+	git config filter.encrypt.clean "gitcrypt clean"
+	git config diff.encrypt.textconv "gitcrypt diff"
+	echo "git-encrypt filter enabled"
+}
+
 init_config() {
 	local answer
 
@@ -117,9 +131,7 @@ init_config() {
 	git config gitcrypt.cipher "$CIPHER"
 
 	# Filters
-	git config filter.encrypt.smudge "gitcrypt smudge"
-	git config filter.encrypt.clean "gitcrypt clean"
-	git config diff.encrypt.textconv "gitcrypt diff"
+	_enable
 }
 
 _clean() {
@@ -137,8 +149,60 @@ _diff() {
 	openssl enc -d -base64 -$CIPHER -k "$PASS" -in "$1" 2> /dev/null || cat "$1"
 }
 
+_crypthistory_impl() {
+	_disable
+	git reset --hard
+	git filter-branch --prune-empty --tree-filter "git-encrypt-filter.sh $0 clean" -f
+	_enable
+	git reset --hard
+}
+
+_crypthistory() {
+	echo -n "You MUST run 'crypthistory' BEFORE any encrypted commits."
+	echo -n "Do you want to recrypt all history? This may corrut your data? [Y/n]"
+	read answer
+
+	case "$answer" in
+		n*|N*)
+			exit 0
+			;;
+		*)
+			echo "This may take a while depends on file sizes in repo..."
+			;;
+	esac
+
+	_crypthistory_impl
+}
+
+_decrypthistory() {
+	_disable
+	git reset --hard
+	git filter-branch --prune-empty --tree-filter "git-encrypt-filter.sh $0 smudge" -f
+	_enable
+	git reset --hard
+}
+
+_recrypt() {
+	echo -n "Do you want to change password and recrypt repo with new one? [Y/n]"
+	read answer
+
+	case "$answer" in
+		n*|N*)
+			exit 0
+			;;
+		*)
+			echo -n "Enter your passphrase: "
+			read PASS
+			;;
+	esac
+
+	_decrypthistory
+	git config gitcrypt.pass "$PASS"
+	_crypthistory_impl
+}
+
 case "$1" in
-	clean|smudge|diff)
+	clean|smudge|diff|enable|disable|crypthistory|decrypthistory|recrypt)
 		# Need a shared salt
 		SALT=$(git config gitcrypt.salt)
 		if [ -z "$SALT" ]; then
