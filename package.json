@@ -1,0 +1,26 @@
+{
+  "name": "git-encrypt",
+  "version": "0.3.2",
+  "description": "Transparent Git Encryption",
+  "main": "gitcrypt",
+  "bin": {
+    "gitcrypt": "./gitcrypt"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/shadowhand/git-encrypt.git"
+  },
+  "keywords": [
+    "git"
+  ],
+  "author": "Woody Gilk <woody@wingsc.com>",
+  "maintainer": "Thomas Levine <_@thomaslevine.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shadowhand/git-encrypt/issues"
+  },
+  "homepage": "https://github.com/shadowhand/git-encrypt"
+}
