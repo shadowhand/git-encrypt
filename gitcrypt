@@ -1,6 +1,6 @@
 #!/bin/bash
 
-readonly VERSION="0.3.0"
+readonly VERSION="0.3.2"
 readonly DEFAULT_CIPHER="aes-256-ecb"
 
 [ -z "$GIT_DIR" ] && GIT_DIR=".git"
