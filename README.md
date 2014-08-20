@@ -9,7 +9,7 @@ and understand the implications of using this tool before you go crazy with it.
 
 ## Features
 
-**Not Vefified on Windows**
+**Not Verified on Windows**
 
 Now you can encrypt/decrypt and recrypt(change passphrase) all history
 
