@@ -24,9 +24,13 @@ Openssl must be installed and the binary must be available in your $PATH.
 ## Installation
 
 ### From a package manager
-Install from npm.
+Install from npm:
 
     npm install -g git-encrypt
+
+Install from Homebrew:
+
+    brew install git-encrypt
 
 ### Manually
 
